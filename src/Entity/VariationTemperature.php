@@ -24,11 +24,6 @@ class VariationTemperature
      */
     private $value;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Machine::class, inversedBy="variationTemperatures")
-     */
-    private $machine;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -42,18 +37,6 @@ class VariationTemperature
     public function setValue(float $value): self
     {
         $this->value = $value;
-
-        return $this;
-    }
-
-    public function getMachine(): ?Machine
-    {
-        return $this->machine;
-    }
-
-    public function setMachine(?Machine $machine): self
-    {
-        $this->machine = $machine;
 
         return $this;
     }
