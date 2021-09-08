@@ -7,7 +7,6 @@ use App\Repository\VariationMasseRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiSubresource;
-
 /**
  * @ORM\Entity(repositoryClass=VariationMasseRepository::class)
  * @ApiResource(
@@ -37,10 +36,10 @@ class VariationMasse
     private $value;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Machine::class, inversedBy="variationMasses")
-     * @ApiSubresource()
+     * @ORM\ManyToOne(targetEntity=Machines::class, inversedBy="VariationMasse")
+       * @ApiSubresource()
      */
-    private $machine;
+    private $machines;
 
     public function getId(): ?int
     {
@@ -59,14 +58,14 @@ class VariationMasse
         return $this;
     }
 
-    public function getMachine(): ?Machine
+    public function getMachines(): ?Machines
     {
-        return $this->machine;
+        return $this->machines;
     }
 
-    public function setMachine(?Machine $machine): self
+    public function setMachines(?Machines $machines): self
     {
-        $this->machine = $machine;
+        $this->machines = $machines;
 
         return $this;
     }

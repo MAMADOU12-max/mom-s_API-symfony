@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\MachineRepository;
+use App\Repository\MachinesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,9 +11,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=MachineRepository::class)
+ * @ORM\Entity(repositoryClass=MachinesRepository::class)
  */
-class Machine
+class Machines
 {
     /**
      * @ORM\Id
@@ -34,14 +34,13 @@ class Machine
     private $localisation;
 
     /**
-     * @ORM\OneToMany(targetEntity=VariationTemperature::class, mappedBy="machine")
+     * @ORM\OneToMany(targetEntity=VariationMasse::class, mappedBy="machines")
      */
-    private $variationTemperatures;
+    private $VariationMasse;
 
     public function __construct()
     {
-        $this->variationTemperatures = new ArrayCollection();
-        $this->variationMasses = new ArrayCollection();
+        $this->VariationMasse = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -74,33 +73,32 @@ class Machine
     }
 
     /**
-     * @return Collection|VariationTemperature[]
+     * @return Collection|VariationMasse[]
      */
-    public function getVariationTemperatures(): Collection
+    public function getVariationMasse(): Collection
     {
-        return $this->variationTemperatures;
+        return $this->VariationMasse;
     }
 
-    public function addVariationTemperature(VariationTemperature $variationTemperature): self
+    public function addVariationMasse(VariationMasse $variationMasse): self
     {
-        if (!$this->variationTemperatures->contains($variationTemperature)) {
-            $this->variationTemperatures[] = $variationTemperature;
-            $variationTemperature->setMachine($this);
+        if (!$this->VariationMasse->contains($variationMasse)) {
+            $this->VariationMasse[] = $variationMasse;
+            $variationMasse->setMachines($this);
         }
 
         return $this;
     }
 
-    public function removeVariationTemperature(VariationTemperature $variationTemperature): self
+    public function removeVariationMasse(VariationMasse $variationMasse): self
     {
-        if ($this->variationTemperatures->removeElement($variationTemperature)) {
+        if ($this->VariationMasse->removeElement($variationMasse)) {
             // set the owning side to null (unless already changed)
-            if ($variationTemperature->getMachine() === $this) {
-                $variationTemperature->setMachine(null);
+            if ($variationMasse->getMachines() === $this) {
+                $variationMasse->setMachines(null);
             }
         }
 
         return $this;
     }
-
 }
