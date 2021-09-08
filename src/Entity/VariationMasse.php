@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
+use DateTime;
+use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\VariationMasseRepository;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=VariationMasseRepository::class)
  * @ApiResource(
- *      normalizationContext={"groups"={"variationmasse:read"}} ,
  *      collectionOperations={
  *          "get","post"
  *      },
@@ -31,15 +31,25 @@ class VariationMasse
 
     /**
      * @ORM\Column(type="float")
-     * @Groups("variationmasse:read")
+     * @Groups({"machines:read"})
      */
     private $value;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Machines::class, inversedBy="VariationMasse")
-       * @ApiSubresource()
+     * @ORM\ManyToOne(targetEntity=Machines::class, inversedBy="VariationMasse",cascade={"persist"})
      */
     private $machines;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Groups({"machines:read"})
+     */
+    private $date;
+
+    public function __construct()
+    {
+        return $this->date = new DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -66,6 +76,18 @@ class VariationMasse
     public function setMachines(?Machines $machines): self
     {
         $this->machines = $machines;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): self
+    {
+        $this->date = $date;
 
         return $this;
     }

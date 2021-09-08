@@ -10,7 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *    denormalizationContext={"groups"={"machines:write"}} ,   
+ *    normalizationContext={"groups"={"machines:read"}} ,   
+ * )
  * @ORM\Entity(repositoryClass=MachinesRepository::class)
  */
 class Machines
@@ -19,22 +22,27 @@ class Machines
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("variationmasse:read")
+     * @Groups({"machines:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("machines:write")
+     * @Groups({"machines:read"})
      */
     private $keymachine;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("machines:write")
+     * @Groups({"machines:read"})
      */
     private $localisation;
 
     /**
-     * @ORM\OneToMany(targetEntity=VariationMasse::class, mappedBy="machines")
+     * @ORM\OneToMany(targetEntity=VariationMasse::class, mappedBy="machines",cascade={"persist"})
+     * @Groups({"machines:read"})
      */
     private $VariationMasse;
 
