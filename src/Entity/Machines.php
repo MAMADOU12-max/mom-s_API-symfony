@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\MachinesRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\MachinesRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -22,21 +23,19 @@ class Machines
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"machines:read"})
+     * @Groups({"machines:read","ecoles:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("machines:write")
-     * @Groups({"machines:read"})
+     * @Groups("machines:write", "machines:read", "ecoles:read")
      */
     private $keymachine;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("machines:write")
-     * @Groups({"machines:read"})
+     * @Groups("machines:write","machines:read", "ecoles:read")
      */
     private $localisation;
 
@@ -45,6 +44,12 @@ class Machines
      * @Groups({"machines:read"})
      */
     private $VariationMasse;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Ecoles::class, inversedBy="machines")
+      * @Groups("machines:write")
+     */
+    private $ecoles;
 
     public function __construct()
     {
@@ -106,6 +111,18 @@ class Machines
                 $variationMasse->setMachines(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEcoles(): ?Ecoles
+    {
+        return $this->ecoles;
+    }
+
+    public function setEcoles(?Ecoles $ecoles): self
+    {
+        $this->ecoles = $ecoles;
 
         return $this;
     }
